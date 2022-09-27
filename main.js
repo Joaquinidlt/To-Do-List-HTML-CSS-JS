@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
 
     nameInput.value = username;
 
-    nameInput.addEventListener('change', e => {
+    nameInput.addEventListener('change', (e) => {
         localStorage.setItem('username', e.target.value);
     })
 
@@ -25,22 +25,22 @@ window.addEventListener('load', () => {
 
         localStorage.setItem('todos', JSON.stringify(todos));
 
+        // Reset the form
         e.target.reset();
 
-        DisplayTodos();
+        DisplayTodos()
     })
 
-    DisplayTodos();
+    DisplayTodos()
 })
 
 function DisplayTodos() {
     const todoList = document.querySelector('#todo-list');
-
-    todoList.innerHTML = todoList;
+    todoList.innerHTML = "";
 
     todos.forEach(todo => {
         const todoItem = document.createElement('div');
-        todoItem.classList.add('todo-item')
+        todoItem.classList.add('todo-item');
 
         const label = document.createElement('label');
         const input = document.createElement('input');
@@ -52,14 +52,12 @@ function DisplayTodos() {
 
         input.type = 'checkbox';
         input.checked = todo.done;
-        span.classList.add('business');
-
+        span.classList.add('bubble');
         if (todo.category == 'personal') {
             span.classList.add('personal');
         } else {
             span.classList.add('business');
         }
-
         content.classList.add('todo-content');
         actions.classList.add('actions');
         edit.classList.add('edit');
@@ -83,8 +81,8 @@ function DisplayTodos() {
             todoItem.classList.add('done');
         }
 
-        input.addEventListener('click', e => {
-            todo.done = e.target.chacked;
+        input.addEventListener('change', (e) => {
+            todo.done = e.target.checked;
             localStorage.setItem('todos', JSON.stringify(todos));
 
             if (todo.done) {
@@ -93,19 +91,28 @@ function DisplayTodos() {
                 todoItem.classList.remove('done');
             }
 
-            DisplayTodos();
+            DisplayTodos()
+
         })
 
-        edit.addEventListener('click', e => {
+        edit.addEventListener('click', (e) => {
             const input = content.querySelector('input');
             input.removeAttribute('readonly');
             input.focus();
-            input.addEventListener('blur', e => {
+            input.addEventListener('blur', (e) => {
                 input.setAttribute('readonly', true);
                 todo.content = e.target.value;
                 localStorage.setItem('todos', JSON.stringify(todos));
-                DisplayTodos();
+                DisplayTodos()
+
             })
         })
-    });
+
+        deleteButton.addEventListener('click', (e) => {
+            todos = todos.filter(t => t != todo);
+            localStorage.setItem('todos', JSON.stringify(todos));
+            DisplayTodos()
+        })
+
+    })
 }
